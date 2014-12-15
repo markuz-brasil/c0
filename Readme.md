@@ -1,4 +1,6 @@
-# Co
+# c0
+
+  TODO: explain the motivation of this fork
 
   [![Build Status](https://travis-ci.org/visionmedia/co.svg?branch=master)](https://travis-ci.org/visionmedia/co)
 
