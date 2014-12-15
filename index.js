@@ -117,7 +117,7 @@ function co(fn) {
  * @return {Function}
  * @api private
  */
-
+module.exports.toThunk = toThunk;
 function toThunk(obj, ctx) {
 
   if (isGeneratorFunction(obj)) {
@@ -151,6 +151,7 @@ function toThunk(obj, ctx) {
  * @api private
  */
 
+module.exports.objectToThunk = objectToThunk;
 function objectToThunk(obj){
   var ctx = this;
   var isArray = Array.isArray(obj);
@@ -218,6 +219,7 @@ function objectToThunk(obj){
  * @api private
  */
 
+module.exports.promiseToThunk = promiseToThunk;
 function promiseToThunk(promise) {
   return function(fn){
     promise.then(function(res) {

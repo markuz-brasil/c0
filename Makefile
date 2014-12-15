@@ -6,7 +6,7 @@ test:
 		--reporter spec \
 		--slow 2s \
 		--harmony-generators \
-		--bail
+		
 
 bench:
 	@$(NODE) ./node_modules/.bin/matcha \

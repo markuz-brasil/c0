@@ -1,3 +1,6 @@
+4.0.0 / ????-??-??
+==================
+ * now exports `toThunk`, `objectToThunk`, `promisetoThunk` and the original `co`
 
 3.1.0 / 2014-06-30
 ==================
