@@ -10,6 +10,7 @@ var slice = Array.prototype.slice;
  */
 
 module.exports = co;
+module.exports.c0 = co;
 
 /**
  * Wrap the given generator `fn` and
