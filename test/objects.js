@@ -1,13 +1,13 @@
 
 var thunk = require('thunkify');
-var co = require('..');
+var c0 = require('..');
 var fs = require('fs');
 
 var read = thunk(fs.readFile);
 
-describe('co(* -> yield {})', function(){
+describe('c0(* -> yield {})', function(){
   it('should aggregate several thunks', function(done){
-    co(function *(){
+    c0(function *(){
       var a = read('index.js', 'utf8');
       var b = read('Makefile', 'utf8');
       var c = read('package.json', 'utf8');
@@ -26,14 +26,14 @@ describe('co(* -> yield {})', function(){
   })
 
   it('should noop with no args', function(done){
-    co(function *(){
+    c0(function *(){
       var res = yield {};
       Object.keys(res).should.have.length(0);
     })(done);
   })
 
   it('should ignore non-thunkable properties', function(done){
-    co(function *(){
+    c0(function *(){
       var foo = {
         name: { first: 'tobi' },
         age: 2,
@@ -59,7 +59,7 @@ describe('co(* -> yield {})', function(){
       }
     }
     
-    co(function *(){
+    c0(function *(){
       var before = {
         sun: timedThunk(30),
         rain: timedThunk(20),

@@ -1,5 +1,7 @@
 4.0.0 / ????-??-??
 ==================
+ * changed async API to sync one.  
+ * remove reliase `setImmediate()`, unless no callback is given (released Zargo !!)
  * now exports `toThunk`, `objectToThunk`, `promisetoThunk` and the original `co`
 
 3.1.0 / 2014-06-30

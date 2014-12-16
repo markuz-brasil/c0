@@ -1,5 +1,5 @@
 
-var co = require('..');
+var c0 = require('..');
 var assert = require('assert');
 var bluebird = require('bluebird');
 
@@ -10,10 +10,10 @@ function getPromise(val, err) {
   });
 }
 
-describe('co(fn)', function(){
+describe('c0(fn)', function(){
   describe('with one promise yield', function(){
     it('should work', function(done){
-      co(function *(){
+      c0(function *(){
         var a = yield getPromise(1);
         a.should.equal(1);
       })(done);
@@ -22,7 +22,7 @@ describe('co(fn)', function(){
 
   describe('with several promise yields', function(){
     it('should work', function(done){
-      co(function *(){
+      c0(function *(){
         var a = yield getPromise(1);
         var b = yield getPromise(2);
         var c = yield getPromise(3);
@@ -36,7 +36,7 @@ describe('co(fn)', function(){
     it('should throw and resume', function(done){
       var error;
 
-      co(function *(){
+      c0(function *(){
         try {
           yield getPromise(1, new Error('boom'));
         } catch (err) {

@@ -1,4 +1,4 @@
-var co = require('..');
+var c0 = require('..');
 var assert = require('assert');
 
 describe('bugs', function(){
@@ -11,12 +11,14 @@ describe('bugs', function(){
       done();
     })
 
-    co(function *() {
+    c0(function *() {
       yield function (done) {
         done(new Error('boom'))
       }
     })(function(err) {
-      if (err) throw err;
+      setImmediate(function(){
+        if (err) throw err;
+      });
     });
   })
 })

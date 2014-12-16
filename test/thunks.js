@@ -1,5 +1,5 @@
 
-var co = require('..');
+var c0 = require('..');
 var assert = require('assert');
 
 function get(val, err, error) {
@@ -11,10 +11,10 @@ function get(val, err, error) {
   }
 }
 
-describe('co(fn)', function(){
+describe('c0(fn)', function(){
   describe('with no yields', function(){
     it('should work', function(done){
-      co(function *(){
+      c0(function *(){
 
       })(done);
     })
@@ -22,7 +22,7 @@ describe('co(fn)', function(){
 
   describe('with one yield', function(){
     it('should work', function(done){
-      co(function *(){
+      c0(function *(){
         var a = yield get(1);
         a.should.equal(1);
       })(done);
@@ -31,7 +31,7 @@ describe('co(fn)', function(){
 
   describe('with several yields', function(){
     it('should work', function(done){
-      co(function *(){
+      c0(function *(){
         var a = yield get(1);
         var b = yield get(2);
         var c = yield get(3);
@@ -49,7 +49,7 @@ describe('co(fn)', function(){
         }
       }
 
-      co(function *(){
+      c0(function *(){
         var out = yield exec('something');
         out.should.eql(['stdout', 'stderr']);
       })(done);
@@ -58,7 +58,7 @@ describe('co(fn)', function(){
 
   describe('when the function throws', function(){
     it('should be caught', function(done){
-      co(function *(){
+      c0(function *(){
         try {
           var a = yield get(1, null, new Error('boom'));
         } catch (err) {
@@ -70,7 +70,7 @@ describe('co(fn)', function(){
 
   describe('when an error is passed then thrown', function(){
     it('should only catch the first error only', function(done){
-      co(function *() {
+      c0(function *() {
         yield function (done){
           done(new Error('first'));
           throw new Error('second');
@@ -86,7 +86,7 @@ describe('co(fn)', function(){
     it('should throw and resume', function(done){
       var error;
 
-      co(function *(){
+      c0(function *(){
         try {
           yield get(1, new Error('boom'));
         } catch (err) {
@@ -100,11 +100,11 @@ describe('co(fn)', function(){
     })
   })
 
-  describe('with nested co()s', function(){
+  describe('with nested c0()s', function(){
     it('should work', function(done){
       var hit = [];
 
-      co(function *(){
+      c0(function *(){
         var a = yield get(1);
         var b = yield get(2);
         var c = yield get(3);
@@ -112,7 +112,7 @@ describe('co(fn)', function(){
 
         [a,b,c].should.eql([1,2,3]);
 
-        yield co(function *(){
+        yield c0(function *(){
           hit.push('two');
           var a = yield get(1);
           var b = yield get(2);
@@ -120,7 +120,7 @@ describe('co(fn)', function(){
 
           [a,b,c].should.eql([1,2,3]);
 
-          yield co(function *(){
+          yield c0(function *(){
             hit.push('three');
             var a = yield get(1);
             var b = yield get(2);
@@ -130,7 +130,7 @@ describe('co(fn)', function(){
           });
         });
 
-        yield co(function *(){
+        yield c0(function *(){
           hit.push('four');
           var a = yield get(1);
           var b = yield get(2);
@@ -147,7 +147,7 @@ describe('co(fn)', function(){
   describe('return values', function(){
     describe('with a callback', function(){
       it('should be passed', function(done){
-        var fn = co(function *(){
+        var fn = c0(function *(){
           return [
             yield get(1),
             yield get(2),
@@ -165,8 +165,8 @@ describe('co(fn)', function(){
 
     describe('when nested', function(){
       it('should return the value', function(done){
-        var fn = co(function *(){
-          var other = yield co(function *(){
+        var fn = c0(function *(){
+          var other = yield c0(function *(){
             return [
               yield get(4),
               yield get(5),
@@ -194,7 +194,7 @@ describe('co(fn)', function(){
     it('should throw', function(done){
       var errors = [];
 
-      co(function *(){
+      c0(function *(){
         try {
           var a = yield 'something';
         } catch (err) {
@@ -219,7 +219,7 @@ describe('co(fn)', function(){
     it('should throw', function(done){
       var errors = [];
 
-      co(function *(){
+      c0(function *(){
         try {
           var a = yield get(1, new Error('foo'));
         } catch (err) {
@@ -239,7 +239,7 @@ describe('co(fn)', function(){
     it('should catch errors on .send()', function(done){
       var errors = [];
 
-      co(function *(){
+      c0(function *(){
         try {
           var a = yield get(1, null, new Error('foo'));
         } catch (err) {
@@ -257,7 +257,7 @@ describe('co(fn)', function(){
     })
 
     it('should pass future errors to the callback', function(done){
-      co(function *(){
+      c0(function *(){
         yield get(1);
         yield get(2, null, new Error('fail'));
         assert(false);
@@ -269,7 +269,7 @@ describe('co(fn)', function(){
     })
 
     it('should pass immediate errors to the callback', function(done){
-      co(function *(){
+      c0(function *(){
         yield get(1);
         yield get(2, new Error('fail'));
         assert(false);
@@ -281,7 +281,7 @@ describe('co(fn)', function(){
     })
 
     it('should catch errors on the first invocation', function(done){
-      co(function *(){
+      c0(function *(){
         throw new Error('fail');
       })(function(err){
         err.message.should.equal('fail');
@@ -299,7 +299,7 @@ describe('co(fn)', function(){
           done();
         })
 
-        co(function *(){
+        c0(function *(){
           yield function (done) {
             setImmediate(function () {
               done(new Error('boom'));
@@ -317,7 +317,7 @@ describe('co(fn)', function(){
           done();
         })
 
-        co(function *(){
+        c0(function *(){
           yield function (done) {
             done(new Error('boom'));
           }

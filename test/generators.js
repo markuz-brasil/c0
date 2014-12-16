@@ -1,5 +1,5 @@
 
-var co = require('..');
+var c0 = require('..');
 var assert = require('assert');
 
 function sleep(ms) {
@@ -24,10 +24,10 @@ function *work() {
   return calls;
 }
 
-describe('co(fn)', function(){
+describe('c0(fn)', function(){
   describe('with a generator', function(){
-    it('should wrap with co()', function(done){
-      co(function *(){
+    it('should wrap with c0()', function(done){
+      c0(function *(){
         var calls = yield work();
         calls.should.eql(['one', 'two', 'three', 'four', 'five']);
 
@@ -45,7 +45,7 @@ describe('co(fn)', function(){
     })
 
     it('should catch errors', function(done){
-      co(function *(){
+      c0(function *(){
         yield function *(){
           throw new Error('boom');
         }();

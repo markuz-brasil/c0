@@ -9,8 +9,8 @@ var slice = Array.prototype.slice;
  * Expose `co`.
  */
 
-module.exports = co;
-module.exports.c0 = co;
+module.exports = c0;
+
 
 /**
  * Wrap the given generator `fn` and
@@ -21,13 +21,13 @@ module.exports.c0 = co;
  * @api public
  */
 
-function co(fn) {
+function c0(fn) {
   var isGenFun = isGeneratorFunction(fn);
 
-  return function (done) {
+  return function _co (done) {
     var ctx = this;
 
-    // in toThunk() below we invoke co()
+    // in toThunk() below we invoke c0()
     // with a generator, so optimize for
     // this case
     var gen = fn;
@@ -49,12 +49,14 @@ function co(fn) {
     // wrap the callback in a setImmediate
     // so that any of its errors aren't caught by `co`
     function exit(err, res) {
-      setImmediate(function(){
+      if (!err) return done.call(ctx, err, res);
+
+      // setImmediate(function _exit () {
         done.call(ctx, err, res);
-      });
+      // });
     }
 
-    function next(err, res) {
+    function next (err, res) {
       var ret;
 
       // multiple args
@@ -88,17 +90,17 @@ function co(fn) {
       if ('function' == typeof ret.value) {
         var called = false;
         try {
-          ret.value.call(ctx, function(){
+          ret.value.call(ctx, function _retValue () {
             if (called) return;
             called = true;
             next.apply(ctx, arguments);
           });
         } catch (e) {
-          setImmediate(function(){
+          // setImmediate(function(){
             if (called) return;
             called = true;
             next(e);
-          });
+          // });
         }
         return;
       }
@@ -122,11 +124,11 @@ module.exports.toThunk = toThunk;
 function toThunk(obj, ctx) {
 
   if (isGeneratorFunction(obj)) {
-    return co(obj.call(ctx));
+    return c0(obj.call(ctx));
   }
 
   if (isGenerator(obj)) {
-    return co(obj);
+    return c0(obj);
   }
 
   if (isPromise(obj)) {
@@ -157,7 +159,7 @@ function objectToThunk(obj){
   var ctx = this;
   var isArray = Array.isArray(obj);
 
-  return function(done){
+  return function _objectToThunk (done) {
     var keys = Object.keys(obj);
     var pending = keys.length;
     var results = isArray
@@ -166,9 +168,9 @@ function objectToThunk(obj){
     var finished;
 
     if (!pending) {
-      setImmediate(function(){
+      // setImmediate(function(){
         done(null, results)
-      });
+      // });
       return;
     }
 
@@ -193,7 +195,7 @@ function objectToThunk(obj){
           return --pending || done(null, results);
         }
 
-        fn.call(ctx, function(err, res){
+        fn.call(ctx, function _runFn (err, res){
           if (finished) return;
 
           if (err) {
@@ -222,8 +224,8 @@ function objectToThunk(obj){
 
 module.exports.promiseToThunk = promiseToThunk;
 function promiseToThunk(promise) {
-  return function(fn){
-    promise.then(function(res) {
+  return function _promiseToThunk (fn){
+    promise.then(function _promiseToThunkThen (res) {
       fn(null, res);
     }, fn);
   }
@@ -280,10 +282,14 @@ function isObject(val) {
 /**
  * Throw `err` in a new stack.
  *
- * This is used when co() is invoked
+ * This is used when c0() is invoked
  * without supplying a callback, which
  * should only be for demonstrational
  * purposes.
+ *
+ * releasing Zalgo (breaking the sync API contract)
+ * see: http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony
+ * for more info on async VS sync APIs
  *
  * @param {Error} err
  * @api private
@@ -291,7 +297,7 @@ function isObject(val) {
 
 function error(err) {
   if (!err) return;
-  setImmediate(function(){
+  setImmediate(function _error (){
     throw err;
   });
 }

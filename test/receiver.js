@@ -1,6 +1,6 @@
 
 var thunk = require('thunkify');
-var co = require('..');
+var c0 = require('..');
 var fs = require('fs');
 var read = thunk(fs.readFile);
 var assert = require('assert');
@@ -9,9 +9,9 @@ var ctx = {
   foo: 'bar'
 };
 
-describe('co(receiver).call(ctx)', function(){
+describe('c0(receiver).call(ctx)', function(){
   it('should set immediate gen receiver', function(done){
-    co(function *(){
+    c0(function *(){
       assert(ctx == this);
     }).call(ctx, done);
   })
@@ -26,7 +26,7 @@ describe('co(receiver).call(ctx)', function(){
       yield bar;
     }
 
-    co(function *(){
+    c0(function *(){
       assert(ctx == this);
       yield foo;
     }).call(ctx, done);
@@ -38,7 +38,7 @@ describe('co(receiver).call(ctx)', function(){
       done();
     }
 
-    co(function *(){
+    c0(function *(){
       assert(ctx == this);
       yield foo;
     }).call(ctx, done);
@@ -57,7 +57,7 @@ describe('co(receiver).call(ctx)', function(){
       assert(ctx == this);
     }
 
-    co(function *(){
+    c0(function *(){
       assert(ctx == this);
       yield [foo, bar, baz];
     }).call(ctx, done);
@@ -79,16 +79,16 @@ describe('co(receiver).call(ctx)', function(){
       done();
     }
 
-    co(function *(){
+    c0(function *(){
       assert(ctx == this);
       yield [foo, bar, baz];
     }).call(ctx, done);
   })
 })
 
-describe('co(receiver)(args...)', function(){
+describe('c0(receiver)(args...)', function(){
   it('should pass arguments to the receiver', function(done){
-    co(function *(a, b, c){
+    c0(function *(a, b, c){
       assert(a == 1);
       assert(b == 2);
       assert(c == 3);
@@ -96,20 +96,20 @@ describe('co(receiver)(args...)', function(){
   })
 
   it('should not pass the callback to the receiver', function(done){
-    co(function *(a, b, c){
+    c0(function *(a, b, c){
       assert(arguments.length == 3);
     })(1, 2, 3, done);
   })
 
   it('should work when less arguments are passed than expected', function(done){
-    co(function *(a, b, c){
+    c0(function *(a, b, c){
       assert(a == 1);
       assert(arguments.length == 1);
     })(1, done);
   })
 
   it('should work without a callback', function(){
-    co(function *(a, b, c){
+    c0(function *(a, b, c){
       assert(a == 1);
       assert(arguments.length == 1);
     })(1);
