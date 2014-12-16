@@ -1,5 +1,5 @@
 
-var co = require('./');
+var c0 = require('./');
 var bluebird = require('bluebird');
 
 
@@ -18,11 +18,11 @@ function getPromise(val, err) {
   });
 }
 
-suite('co()', function(){
+suite('c0()', function(){
   set('mintime', process.env.MINTIME | 0 || 2000)
 
   bench('promises', function(done){
-    co(function *(){
+    c0(function *(){
       yield setImmediate;
       yield getPromise(1);
       yield getPromise(2);
@@ -31,7 +31,7 @@ suite('co()', function(){
   })
 
   bench('thunks', function(done){
-    co(function *(){
+    c0(function *(){
       yield setImmediate;
       yield fun;
       yield fun;
@@ -40,14 +40,14 @@ suite('co()', function(){
   })
 
   bench('arrays', function(done){
-    co(function *(){
+    c0(function *(){
       yield setImmediate;
       yield [fun, fun, fun];
     })(done);
   })
 
   bench('objects', function(done){
-    co(function *(){
+    c0(function *(){
       yield setImmediate;
       yield {
         a: fun,
@@ -58,7 +58,7 @@ suite('co()', function(){
   })
 
   bench('generators', function(done){
-    co(function *(){
+    c0(function *(){
       yield setImmediate;
       yield gen();
       yield gen();
@@ -67,7 +67,7 @@ suite('co()', function(){
   })
 
   bench('generators delegated', function(done){
-    co(function *(){
+    c0(function *(){
       yield setImmediate;
       yield* gen();
       yield* gen();
@@ -76,7 +76,7 @@ suite('co()', function(){
   })
 
   bench('generator functions', function(done){
-    co(function *(){
+    c0(function *(){
       yield setImmediate;
       yield gen;
       yield gen;
